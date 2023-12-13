@@ -12,12 +12,13 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) {
         ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration()
-                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE)
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE) // Метод устанавливает стратегию обновления схемы базы данных для движка Camunda BPM при его создании
                 .setJdbcUrl("jdbc:h2:mem:my-own-db;DB_CLOSE_DELAY=1")
                 .setJobExecutorActivate(true) // Указывает, активировать ли процесс выполнения заданий (Job Executor) во время создания движка (Process Engine)
                 .buildProcessEngine(); // Создание экземпляра ProcessEngine, который представляет собой основной интерфейс для взаимодействия с функциями BPM движка
 
-        RepositoryService repositoryService = processEngine.getRepositoryService();
+        RepositoryService repositoryService = processEngine.getRepositoryService(); // Это интерфейс в Camunda BPM API, предоставляющий доступ к операциям, связанным с хранилищем BPMN-процессов. Это может включать деплой процессов, получение информации о процессах и их версиях, удаление процессов и т. д.
+
         BpmnModelInstance process = Bpmn.createExecutableProcess("myProcess")
                 .startEvent()
                 .name("Start Event")
@@ -30,7 +31,7 @@ public class Main {
                 .id("endEvent")
                 .done(); // Завершение создания процесса
 
-        // Создание SequenceFlow и связывание с элементами
+        // Создание SequenceFlow и связывание с элементами. SequenceFlow - это объект, который представляет связь между элементами в процессе
         SequenceFlow flow1 = process.newInstance(SequenceFlow.class);
         flow1.setId("startEventToUserTask");
 
